@@ -61,17 +61,23 @@ class CosmicsScenarioTest(unittest.TestCase):
             msg += str(ex)
             self.fail(msg)
 
+    def testExpressProcessing(self):
+        """ test expressProcessing method"""
+        scenario = getScenario("Cosmics")
+
+        try:
+            scenario.expressProcessing()
+        except Exception, ex:
+            msg = "Error calling Cosmics.expressProcessing:\n"
+            msg += str(ex)
+            self.fail(msg)
+
             
     def testAlcaReco(self):
         """ test alcaReco method"""
         scenario = getScenario("Cosmics")
-
-        proc = cms.Process("ALCARECO")
-
         try:
-            scenario.alcaReco(proc,
-                              "ALCARECOStreamHcalCalHOCosmics",
-                              "ALCARECOStreamTkAlCosmics")
+            scenario.alcaReco("ALCARECOStreamMuAlStandAloneCosmics")
         except Exception, ex:
             msg = "Error preparing Alca Reco configuration\n"
             msg += str(ex)
