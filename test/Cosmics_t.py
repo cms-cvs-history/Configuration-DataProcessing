@@ -13,6 +13,18 @@ from Configuration.DataProcessing.GetScenario import getScenario
 
 
 
+def writePSetFile(name, process):
+    """
+    _writePSetFile_
+
+    Util to dump the process to a file
+
+    """
+    handle = open(name, 'w')
+    handle.write(process.dumpPython())
+    handle.close()
+
+
 class CosmicsScenarioTest(unittest.TestCase):
     """
     unittest for cosmics scenario
@@ -39,12 +51,17 @@ class CosmicsScenarioTest(unittest.TestCase):
         
         scenario = getScenario("Cosmics")
         try:
-            scenario.promptReco(proc, proc.writeReco)
+            process = scenario.promptReco(proc, proc.writeReco)
+            writePSetFile("testPromptReco.py", process)
         except Exception, ex:
             msg = "Failed to create Prompt Reco configuration\n"
             msg += "for Cosmics Scenario\n"
             msg += str(ex)
             self.fail(msg)
+
+        
+        
+
 
     def testDQMHarvesting(self):
         """test dqmHarvesting  method"""
@@ -53,8 +70,10 @@ class CosmicsScenarioTest(unittest.TestCase):
         scenario = getScenario("Cosmics")
 
         try:
-            scenario.dqmHarvesting("dataset", 123456, "GLOBALTAG::ALL",
-                                   "file1", "file2", "file3")
+            process = scenario.dqmHarvesting("dataset", 123456,
+                                             "GLOBALTAG::ALL",
+                                             "file1", "file2", "file3")
+            writePSetFile("testDQMHarvesting.py", process)
         except Exception, ex:
             msg = "Failed creating DQM Harvesting configuration "
             msg += "for Cosmics scenario:\n"
@@ -66,7 +85,8 @@ class CosmicsScenarioTest(unittest.TestCase):
         scenario = getScenario("Cosmics")
 
         try:
-            scenario.expressProcessing()
+            process = scenario.expressProcessing()
+            writePSetFile("testExpressProcessing.py", process)
         except Exception, ex:
             msg = "Error calling Cosmics.expressProcessing:\n"
             msg += str(ex)
@@ -77,7 +97,8 @@ class CosmicsScenarioTest(unittest.TestCase):
         """ test alcaReco method"""
         scenario = getScenario("Cosmics")
         try:
-            scenario.alcaReco("ALCARECOStreamMuAlStandAloneCosmics")
+            process = scenario.alcaReco("ALCARECOStreamMuAlStandAloneCosmics")
+            writePSetFile("testAlcaReco.py", process)
         except Exception, ex:
             msg = "Error preparing Alca Reco configuration\n"
             msg += str(ex)
