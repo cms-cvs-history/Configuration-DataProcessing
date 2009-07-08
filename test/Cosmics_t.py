@@ -45,13 +45,11 @@ class CosmicsScenarioTest(unittest.TestCase):
     def testPromptReco(self):
         """test promptReco method"""
 
-        proc = cms.Process("RECO")
-        proc.writeReco = cms.OutputModule("writeReco")
         
         
         scenario = getScenario("Cosmics")
         try:
-            process = scenario.promptReco(proc, proc.writeReco)
+            process = scenario.promptReco("GLOBALTAG::ALL", ['RECO'])
             writePSetFile("testPromptReco.py", process)
         except Exception, ex:
             msg = "Failed to create Prompt Reco configuration\n"
@@ -71,8 +69,8 @@ class CosmicsScenarioTest(unittest.TestCase):
 
         try:
             process = scenario.dqmHarvesting("dataset", 123456,
-                                             "GLOBALTAG::ALL",
-                                             "file1", "file2", "file3")
+                                             "GLOBALTAG::ALL")
+            
             writePSetFile("testDQMHarvesting.py", process)
         except Exception, ex:
             msg = "Failed creating DQM Harvesting configuration "
@@ -85,7 +83,7 @@ class CosmicsScenarioTest(unittest.TestCase):
         scenario = getScenario("Cosmics")
 
         try:
-            process = scenario.expressProcessing()
+            process = scenario.expressProcessing("GLOBALTAG::ALL")
             writePSetFile("testExpressProcessing.py", process)
         except Exception, ex:
             msg = "Error calling Cosmics.expressProcessing:\n"
