@@ -83,12 +83,18 @@ class CosmicsScenarioTest(unittest.TestCase):
         scenario = getScenario("Cosmics")
 
         try:
-            process = scenario.expressProcessing("GLOBALTAG::ALL")
+            process = scenario.expressProcessing("GLOBALTAG::ALL",
+                                                 ['RECO', 'RAW'],
+                                                 ['Dataset1'],)
             writePSetFile("testExpressProcessing.py", process)
         except Exception, ex:
             msg = "Error calling Cosmics.expressProcessing:\n"
             msg += str(ex)
             self.fail(msg)
+
+        
+            
+            
 
             
     def testAlcaReco(self):
