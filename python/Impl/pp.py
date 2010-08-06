@@ -46,7 +46,10 @@ class pp(Scenario):
                  'HcalCalDijets',
                  'SiStripCalMinBias',
                  'EcalCalElectron',
-                 'DtCalib']
+                 'DtCalib',
+                 'TkAlJpsiMuMu',
+                 'TkAlUpsilonMuMu',
+                 'TkAlZMuMu']
         step = stepALCAPRODUCER(skims)
         options = Options()
         options.__dict__.update(defaultOptions.__dict__)
@@ -137,7 +140,7 @@ class pp(Scenario):
         if 'PromptCalibProd' in skims:
             step = "ALCA:PromptCalibProd" 
             skims.remove('PromptCalibProd')
-        print skims
+        
         if len( skims ) > 0:
             if step != "":
                 step += ","
