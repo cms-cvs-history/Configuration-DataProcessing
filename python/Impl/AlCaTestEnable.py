@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-_cosmics_
+_AlCaTestEnable_
 
-Scenario supporting cosmic data taking
+Scenario supporting proton collisions
 
 """
 
@@ -16,39 +16,32 @@ from Configuration.PyReleaseValidation.ConfigBuilder import ConfigBuilder
 from Configuration.PyReleaseValidation.ConfigBuilder import Options
 from Configuration.PyReleaseValidation.ConfigBuilder import defaultOptions
 from Configuration.PyReleaseValidation.ConfigBuilder import installFilteredStream
-from Configuration.DataProcessing.RecoTLR import customiseCosmicData
+from Configuration.DataProcessing.RecoTLR import customisePrompt,customiseExpress
 
-class cosmics(Scenario):
+class AlCaTestEnable(Scenario):
     """
-    _cosmics_
+    _AlCaTestEnable_
 
-    Implement configuration building for data processing for cosmic
-    data taking
+    Implement configuration building for data processing for proton
+    collision data taking
 
     """
 
 
-    def promptReco(self, globalTag, writeTiers = ['RECO'], **args):
+    def promptReco(self, globalTag, writeTiers = ['ALCARECO'], **args):
         """
         _promptReco_
 
-        Cosmic data taking prompt reco
+        Proton collision data taking prompt reco
 
         """
 
-        skims = ['TkAlBeamHalo',
-                 'MuAlBeamHaloOverlaps',
-                 'MuAlBeamHalo',
-                 'TkAlCosmics0T',
-                 'MuAlGlobalCosmics',
-                 'MuAlCalIsolatedMu',
-                 'HcalCalHOCosmics',
-                 'DtCalib']
+        skims = ['TkAlLAS']
         step = stepALCAPRODUCER(skims)
         options = Options()
         options.__dict__.update(defaultOptions.__dict__)
-        options.scenario = "cosmics"
-        options.step = 'RAW2DIGI,L1Reco,RECO'+step+',L1HwVal,DQM,ENDJOB'
+        options.scenario = "pp"
+        options.step = step
         options.isMC = False
         options.isData = True
         options.beamspot = None
@@ -67,7 +60,9 @@ class cosmics(Scenario):
         )
         cb.prepare()
 
-        customiseCosmicData(process)  
+        #add the former top level patches here
+        # customisePrompt(process)
+
         return process
 
 
@@ -75,17 +70,16 @@ class cosmics(Scenario):
         """
         _expressProcessing_
 
-        Cosmic data taking express processing
+        Proton collision data taking express processing
 
         """
 
-        skims = ['SiStripCalZeroBias',
-                 'MuAlCalIsolatedMu']
+        skims = ['TkAlLAS']
         step = stepALCAPRODUCER(skims)
         options = Options()
         options.__dict__.update(defaultOptions.__dict__)
-        options.scenario = "cosmics"
-        options.step = 'RAW2DIGI,L1Reco,RECO'+step+',L1HwVal,DQM,ENDJOB'
+        options.scenario = "pp"
+        options.step = step
         options.isMC = False
         options.isData = True
         options.beamspot = None
@@ -99,12 +93,14 @@ class cosmics(Scenario):
         cb = ConfigBuilder(options, process = process, with_output = True)
 
         # Input source
-        process.source = cms.Source("NewEventStreamFileReader",
+        process.source = cms.Source("PoolSource",
             fileNames = cms.untracked.vstring()
         )
         cb.prepare()
 
-        customiseCosmicData(process)  
+        #add the former top level patches here
+        customisePrompt(process)
+        
         return process
 
 
@@ -112,20 +108,20 @@ class cosmics(Scenario):
         """
         _alcaSkim_
 
-        AlcaReco processing & skims for cosmics
+        AlcaReco processing & skims for proton collisions
 
         """
-    
+
         globalTag = None
         if 'globaltag' in args:
             globalTag = args['globaltag']
         
         step = "ALCAOUTPUT:"
         for skim in skims:
-            step += (skim+"+")
+          step += (skim+"+")
         options = Options()
         options.__dict__.update(defaultOptions.__dict__)
-        options.scenario = "cosmics"        
+        options.scenario = "pp"
         options.step = step.rstrip('+')
         options.isMC = False
         options.isData = True
@@ -134,8 +130,8 @@ class cosmics(Scenario):
         options.relval = None
         if globalTag != None :
             options.conditions = "FrontierConditions_GlobalTag,%s" % globalTag
-        options.triggerResultsProcess = 'RECO' 
-                 
+        options.triggerResultsProcess = 'RECO'
+        
         process = cms.Process('ALCA')
         cb = ConfigBuilder(options, process = process)
 
@@ -154,12 +150,12 @@ class cosmics(Scenario):
         """
         _dqmHarvesting_
 
-        Cosmic data taking DQM Harvesting
+        Proton collisions data taking DQM Harvesting
 
         """
         options = defaultOptions
-        options.scenario = "cosmics"
-        options.step = "HARVESTING:dqmHarvesting"
+        options.scenario = "pp"
+        options.step = "HARVESTING:alcaHarvesting"
         options.isMC = False
         options.isData = True
         options.beamspot = None
