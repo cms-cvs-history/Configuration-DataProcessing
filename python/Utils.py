@@ -32,11 +32,8 @@ def addMonitoring(process):
     """
     import FWCore.ParameterSet.Config as cms
     
-    process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck",
-                                            jobReportOutputOnly = cms.untracked.bool(True)
-                                            )
-    process.Timing = cms.Service("Timing",
-                                 summaryOnly = cms.untracked.bool(True)
-                                 )
+    process.add_(cms.Service("SimpleMemoryCheck"))
+    process.add_(cms.Service("Timing"))
+    process.Timing.summaryOnly = cms.untracked(cms.bool(True))
     
     return process
