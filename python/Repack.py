@@ -64,8 +64,10 @@ def repackProcess(**args):
 
         if selectEvents != None:
             outputModule.SelectEvents = cms.untracked.PSet(
-                SelectEvents = cms.vstring(selectEvents)
+                SelectEvents = cms.vstring()
                 )
+            for selCond in selectEvents.split(','):
+                outputModule.SelectEvents.SelectEvents.append(selCond)
 
         setattr(process, moduleLabel, outputModule)
 
