@@ -43,7 +43,6 @@ class cosmics(Scenario):
                  'MuAlGlobalCosmics',
                  'MuAlCalIsolatedMu',
                  'HcalCalHOCosmics',
-                 'DtCalib',
                  'DtCalibCosmics']
         step = stepALCAPRODUCER(skims)
         options = Options()
@@ -81,7 +80,7 @@ class cosmics(Scenario):
         """
 
         skims = ['SiStripCalZeroBias',
-                 'MuAlCalIsolatedMu']
+                 'TkAlCosmics0T']
         step = stepALCAPRODUCER(skims)
         options = Options()
         options.__dict__.update(defaultOptions.__dict__)
